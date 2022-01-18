@@ -1,32 +1,34 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <NavBar />
+    <v-main>
+      <router-view/>
+    </v-main>
+      <Loader />
+      <Snackbar />
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import NavBar from "./components/layouts/NavBar.vue";
+import Loader from './components/helpers/Loader'
+import Snackbar from './components/helpers/Snackbar'
 
-#nav {
-  padding: 30px;
+export default {
+    name: "App",
+    created() {
+        const userString = localStorage.getItem('user')
+        if (userString) {
+            let userData = JSON.parse(userString)
+            this.$store.commit('SET_USER_DATA', userData)
+        }
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+    },
+    components: { Snackbar, Loader, NavBar },
+    beforeMount() {
+        const darkMode = localStorage.getItem('darkMode')
+        console.log(darkMode)
+        this.$vuetify.theme.dark = darkMode == 'true';
     }
-  }
-}
-</style>
+};
+</script>

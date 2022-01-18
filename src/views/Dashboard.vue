@@ -3,7 +3,7 @@
       <v-parallax
           dark
           height="500"
-          src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
+          src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
       >
           <v-row
               align="center"
@@ -14,10 +14,10 @@
                   cols="12"
               >
                   <h1 class="text-h4 font-weight-thin mb-4">
-                      QR-PROJECT
+                      Welcome to the dashboard
                   </h1>
                   <h4 class="subheading">
-                      QR Invoices made easy!
+                      {{ userData.user.firstName? userData.user.firstName : 'User' }}
                   </h4>
               </v-col>
           </v-row>
@@ -95,17 +95,32 @@
 </template>
 
 <script>
-  export default {
-    name: 'HelloWorld',
-    data() {
-      return {
+import { getUserInfo } from '../services/UserService'
 
-      }
+export default {
+    name: "Dashboard",
+    data() {
+        return {
+            userData: {}
+        }
     },
     mounted() {
-      console.log(process.env.VUE_APP_TITLE)
-        this.$store.dispatch('positiveNotification', 'Look at HelloWorld.vue component mounted')
+        this.fetchUserInfo()
+    },
+    methods: {
+        fetchUserInfo() {
+            getUserInfo().then(response => {
+                console.log(response.data)
+                this.userData = response.data;
+            })
+            .catch(error => {
+                console.log(error.response.data)
+            })
+        }
     }
-
-  }
+}
 </script>
+
+<style>
+
+</style>
